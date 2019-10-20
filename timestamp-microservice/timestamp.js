@@ -5,6 +5,13 @@ var r = app.Router()
 var handleTimestamp = function(req, res){
   let dateString = req.params.date_string
   
+  if (dateString =="" || dateString == undefined){
+    let date = new Date()
+    res.json({unix: date.getTime(),
+              utc: date.toUTCString(),
+            })
+  }
+  
   var filterInt = function (value) {
     if(/^([0-9]*)$/.test(value)){
       return Number(value);
@@ -22,7 +29,7 @@ var handleTimestamp = function(req, res){
   }
   
   
-  if(date == undefined){
+  if(isNaN(date.getTime())){
     res.json({error: "Invalid Date",})
     return
   }
@@ -33,6 +40,6 @@ var handleTimestamp = function(req, res){
   })
 }
 
-r.get("/:date_string", handleTimestamp)
+r.get("/:date_string?", handleTimestamp)
 
 module.exports = r
